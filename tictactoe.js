@@ -1,29 +1,36 @@
 // Temporary Value, replace with user input of difficulty
 var rows = 3;
+var datacounter = 0;
+var rowcounter = 0;
 
 // Set up the blank table
 $(document).ready(function() {
 	for (var i = 0; i < rows; i++) {
-		$("table").append("<tr></tr>");
-		console.log(rows);
+		$("table").append("<tr class='" + rowcounter + "'></tr>");
+		rowcounter++;
 	};
 	for (var i = 0; i < rows; i++) {
-		$("tr").append("<td></td>");
+		$("tr").append("<td class='empty " + datacounter + "'></td>");
+		datacounter++;
 	};
 
 });
 
 // Create Array of Moves
 
-var spaces = []
+var spaces = [];
 
 for (var i = 0 ; i < rows; i++) {
 	spaces.push([]);
 	for (var j = 0 ; j < rows; j++) {
 		spaces[i].push("");
-		console.log(i);
-	};
-};
+	}
+}
 
-console.log(spaces);
-console.log(spaces[0][1])
+// handle click events to turn to X
+
+$(document).ready(function(){
+	$(".empty").one("click", function(){
+		$(this).append("X").removeClass("empty").addClass("full");
+	});
+});
