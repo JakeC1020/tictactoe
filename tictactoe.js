@@ -31,6 +31,14 @@ for (var i = 0 ; i < rows; i++) {
 
 $(document).ready(function(){
 	$(".empty").one("click", function(){
-		$(this).append("X").removeClass("empty").addClass("full");
+		$(this).append("X").removeClass("empty");
+		var column = $(this).attr("class");
+		var row = $(this).parent().attr("class");
+		console.log(row + " , " + column);
+		spaces[row][column] = "x";
+		console.log(spaces);
 	});
 });
+
+
+
