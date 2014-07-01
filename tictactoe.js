@@ -18,10 +18,12 @@ $(document).ready(function() {
 var spaces = []
 
 for (var i = 0 ; i < rows; i++) {
-	spaces.push("i: []");
-	/*for (var j = 0 ; j < rows; j++) {
-		spaces[j].push("", "", "");
-	};*/
+	spaces.push([]);
+	for (var j = 0 ; j < rows; j++) {
+		spaces[i].push("");
+		console.log(i);
+	};
 };
 
 console.log(spaces);
+console.log(spaces[0][1])
