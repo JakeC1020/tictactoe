@@ -1,4 +1,6 @@
 // Run on start up and to reset the game board
+difficulty = 1;
+
 function setUp (difficulty) {
 	if (difficulty == undefined) {
 		difficulty = 1;
@@ -34,28 +36,60 @@ function setUp (difficulty) {
 	return spaces;
 }
 
-function checkWin (argument) {
-	// body...
+function isWin (difficulty, spaces, player) {
+	console.log("function called");
+	var rows = 2 + difficulty;
+	var vertical = [];
+	var horizontal = [];
+	var slanted = [];
+
+	//check columns for horizontal win
+	for (var i = 0; i < rows; i++) {
+		for (var j = 0; j < rows; j++) {
+			var spot = spaces[i][j];
+			if (spot == player) {
+				horizontal.push(i + ": " + j);
+			}
+		}
+		if (horizontal.length == rows) {
+			console.log("win");
+			return true;
+		}
+		else {
+			horizontal = [];
+		}
+	}
+
+	//check for vertical win
+
+
 }
 
-spaces = setUp(); // 1 is default difficulty, returns blank array to play on
+spaces = setUp(difficulty); // 1 is default difficulty, returns blank array to play on
 
 
 
 
 // handle click events to turn to X
-
+var freeze = false;
 $(document).ready(function(){
+	
 	$(".empty").one("click", function(){
-		$(this).append("X").removeClass("empty");
-		var column = $(this).attr("class");
-		var row = $(this).parent().attr("class");
-		console.log(row + " , " + column);
-		spaces[row][column] = "x";
-
-		// checkWin() function future call
-		// playSpace() function future call
+		if (!freeze){
+			$(this).append("X").removeClass("empty");
+			var column = $(this).attr("class");
+			var row = $(this).parent().attr("class");
+			console.log(row + " , " + column);
+			spaces[row][column] = "x";
+		}
+		
+		var win = isWin(difficulty, spaces, "x");
+		if (win) {
+			freeze = true; 
+			console.log("freeze set");
+		}
 	});
+	
 });
 
 
