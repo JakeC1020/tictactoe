@@ -1,12 +1,12 @@
 // Run on start up and to reset the game board
-difficulty = 1;
+var difficulty = 1;
+var rows = difficulty + 2;
+var freeze = false;
 
 function setUp (difficulty) {
 	if (difficulty == undefined) {
 		difficulty = 1;
 	};
-
-	var rows = 2 + difficulty;
 	var datacounter = 0;
 	var rowcounter = 0;
 
@@ -36,8 +36,7 @@ function setUp (difficulty) {
 	return spaces;
 }
 
-function isWin (difficulty, spaces, player) {
-	console.log("function called");
+function isWin (player) {
 	var rows = 2 + difficulty;
 	var vertical = [];
 	var horizontal = [];
@@ -110,13 +109,44 @@ function isWin (difficulty, spaces, player) {
 	}
 }
 
-spaces = setUp(difficulty); // 1 is default difficulty, returns blank array to play on
+function playMove () {
+	var available = [];
+
+	// push empty spots to array
+	for (var i = 0; i < rows; i++) {
+		for (var j = 0; j < rows; j++) {
+			var spot = spaces[i][j];
+			if (spot.length < 1) {
+				// spot is empty
+				available.push(i + " , " + j);
+			}
+		}
+	}
+
+	// random spot generator
+	var random_spot = available[Math.floor(Math.random() * spaces.length)];
+	random_spot = random_spot.split(" , ");
+	var row = random_spot[0];
+	var column = random_spot[1];
+
+	spaces[row][column] = "o";
+
+	$("tr." + row + " td." + column).append("O").removeClass("empty");
+	if (isWin("o")) {
+		freeze = true;
+		console.log("you lose!");
+	};
+
+
+}
+
+var spaces = setUp(difficulty); // 1 is default difficulty, returns blank array to play on
 
 
 
 
 // handle click events to turn to X
-var freeze = false;
+
 $(document).ready(function(){
 	
 	$(".empty").one("click", function(){
@@ -128,10 +158,14 @@ $(document).ready(function(){
 			spaces[row][column] = "x";
 		}
 
-		var win = isWin(difficulty, spaces, "x");
-		if (win) {
+		if (isWin("x")) {
 			freeze = true; 
-			console.log("freeze set");
+			console.log("You win!");
+		}
+		else {
+			if (!freeze){
+				playMove();
+			}
 		}
 	});
 	
