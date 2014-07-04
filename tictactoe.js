@@ -48,7 +48,7 @@ function isWin (difficulty, spaces, player) {
 		for (var j = 0; j < rows; j++) {
 			var spot = spaces[i][j];
 			if (spot == player) {
-				horizontal.push(i + ": " + j);
+				horizontal.push(i + " , " + j);
 			}
 		}
 		if (horizontal.length == rows) {
@@ -61,8 +61,53 @@ function isWin (difficulty, spaces, player) {
 	}
 
 	//check for vertical win
+	for (var i = 0; i < rows; i++) {
+		for (var j = 0; j < rows; j++) {
+			var spot = spaces[j][i];
+			if (spot == player) {
+				vertical.push(j + " , " + i);
+			}
+		}
+		if (vertical.length == rows) {
+			console.log("win");
+			return true;
+		}
+		else {
+			vertical = [];
+		}
+	}
 
+	//check for diagonal win TL to BR
+	for (var i = 0; i < rows; i++) {
+		var spot = spaces[i][i];
+		if (spot == player) {
+				slanted.push(i + " , " + i);
+			}
+		}
+	if (slanted.length == rows) {
+		console.log("win");
+		return true;
+	}
+	else {
+		slanted = [];
+	}
 
+	//check for diagonal win TR to BL
+	for (var i = 0; i < rows; i++) {
+		j = rows - 1 - i;
+		var spot = spaces[j][i];
+		if (spot == player) {
+				slanted.push(i + " , " + j);
+				console.log(slanted);
+			}
+		}
+	if (slanted.length == rows) {
+		console.log("win");
+		return true;
+	}
+	else {
+		slanted = [];
+	}
 }
 
 spaces = setUp(difficulty); // 1 is default difficulty, returns blank array to play on
@@ -82,7 +127,7 @@ $(document).ready(function(){
 			console.log(row + " , " + column);
 			spaces[row][column] = "x";
 		}
-		
+
 		var win = isWin(difficulty, spaces, "x");
 		if (win) {
 			freeze = true; 
