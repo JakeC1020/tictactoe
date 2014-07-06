@@ -2,25 +2,18 @@
 var difficulty = 1;
 var rows = difficulty + 2;
 var freeze = false;
+var played = false;
 
-function setUp (difficulty) {
-	if (difficulty == undefined) {
-		difficulty = 1;
-	};
-	var datacounter = 0;
-	var rowcounter = 0;
+function setUp () {
 
 	// Set up the blank table
 	$(document).ready(function() {
 		for (var i = 0; i < rows; i++) {
-			$("table").append("<tr class='" + rowcounter + "'></tr>");
-			rowcounter++;
+			$("table").append("<tr class='" + i + "'></tr>");
 		};
 		for (var i = 0; i < rows; i++) {
-			$("tr").append("<td class='empty " + datacounter + "'></td>");
-			datacounter++;
+			$("tr").append("<td class='empty " + i + "'></td>");
 		};
-
 	});
 
 	// Create blank Array of Moves
@@ -36,8 +29,9 @@ function setUp (difficulty) {
 	return spaces;
 }
 
+
+
 function isWin (player) {
-	var rows = 2 + difficulty;
 	var vertical = [];
 	var horizontal = [];
 	var slanted = [];
@@ -97,7 +91,7 @@ function isWin (player) {
 		var spot = spaces[j][i];
 		if (spot == player) {
 				slanted.push(i + " , " + j);
-				console.log(slanted);
+				
 			}
 		}
 	if (slanted.length == rows) {
@@ -124,7 +118,8 @@ function playMove () {
 	}
 
 	// random spot generator
-	var random_spot = available[Math.floor(Math.random() * spaces.length)];
+	var random_spot = available[Math.floor(Math.random() * available.length)];
+	console.log(random_spot);
 	random_spot = random_spot.split(" , ");
 	var row = random_spot[0];
 	var column = random_spot[1];
@@ -150,12 +145,13 @@ var spaces = setUp(difficulty); // 1 is default difficulty, returns blank array 
 $(document).ready(function(){
 	
 	$(".empty").one("click", function(){
-		if (!freeze){
+		if (!freeze && $(this).hasClass("empty")){
 			$(this).append("X").removeClass("empty");
 			var column = $(this).attr("class");
 			var row = $(this).parent().attr("class");
 			console.log(row + " , " + column);
 			spaces[row][column] = "x";
+			played = true;
 		}
 
 		if (isWin("x")) {
@@ -163,8 +159,9 @@ $(document).ready(function(){
 			console.log("You win!");
 		}
 		else {
-			if (!freeze){
+			if (!freeze && played){
 				playMove();
+				played = false;
 			}
 		}
 	});
